@@ -10,4 +10,4 @@ clean_test:
 	-rm test
 
 test: clean_test test.cpp
-	g++ $(CFLAGS) -o test test.cpp
+	g++ $(CFLAGS) -o test test.cpp -lgmpxx -lgmp
