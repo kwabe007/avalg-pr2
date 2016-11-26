@@ -1,7 +1,7 @@
 #include <iostream>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/math/special_functions/pow.hpp>
-//#include "algo.hpp"
+#include "algo.hpp"
 #include "tools.hpp"
 #include <gmp.h>
 
@@ -47,7 +47,7 @@ int main() {
   std::cout << res3 << std::endl;
   std::cout << res4 << std::endl;*/
 
-  //linked list test
+  /* //test linked list
 
   mpz_t t_ll1, t_ll2, t_ll3, t_ll4;
   mpz_init_set_ui(t_ll1, 55);
@@ -61,6 +61,8 @@ int main() {
   ll.add(t_ll2);
   ll.add(t_ll3);
   ll.add(t_ll4);
+  ll.add(2);
+  ll.add(12341);
 
   mpz_t res;
   mpz_init(res);
@@ -68,11 +70,19 @@ int main() {
   while(!ll.is_empty()) {
     ll.pop(res);
     std::cout << res << std::endl;  
-  }
+    }*/
 
+  /*  mpz_t t_bit1, t_bit2, t_bit3, t_bit4;
+  mpz_init_set_ui(t_bit1, 559);
+  mpz_init_set_ui(t_bit2, 2426);
+  mpz_init_set_ui(t_bit3, 1);
+  mpz_init_set_ui(t_bit4, 24142632);
   
-  
-  
+  std::cout << mpz_tstbit(t_bit1, 0) << std::endl;
+  std::cout << mpz_tstbit(t_bit2, 0) << std::endl;
+  std::cout << mpz_tstbit(t_bit3, 0) << std::endl;
+  std::cout << mpz_tstbit(t_bit4, 0) << std::endl;*/
+
   /*mpz_t integ;
   mpz_init2(integ, 100);
   mpz_t integ2;
@@ -90,6 +100,21 @@ int main() {
     std::cout << i << std::endl;
     }*/
   
+
+  mpz_t fer1;
+  mpz_init_set_ui(fer1, 561354);
+  struct linked_list result;
+
+  fermats(&result, fer1);
   
+  mpz_t res_fer;
+  mpz_init(res_fer);
+  
+  while(!result.is_empty()) {
+    result.pop(res_fer);
+    std::cout << res_fer << std::endl;  
+  }
+
+
   return 0;
 }

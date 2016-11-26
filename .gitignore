@@ -1,0 +1,8 @@
+#binary files
+*.o
+*.exe
+bin
+test
+
+#temporary buffer files
+*~

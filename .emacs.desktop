@@ -1,0 +1,52 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Thu Nov 24 19:44:24 2016
+;; Desktop file format version 206
+;; Emacs version 24.5.1
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (22583 13576 899510 207000) (desktop . "206") "kwap@magenta-10.csc.kth.se" nil nil ((((tty-type . "xterm-256color") (tty . "/dev/tty") (display-type . color) (background-mode . light) (foreground-color . "unspecified-fg") (cursor-color . "black") (background-color . "unspecified-bg") (font . "tty") (height . 70) (width . 212) (modeline . t) (unsplittable) (menu-bar-lines . 1) (frameset--id . "6EFC-6707-D1D0-34F5") (frameset--mini t) (minibuffer . t)) ((min-height . 8) (min-width . 20) (min-height-ignore . 4) (min-width-ignore . 4) (min-height-safe . 2) (min-width-safe . 4) (min-pixel-height . 8) (min-pixel-width . 20) (min-pixel-height-ignore . 4) (min-pixel-width-ignore . 4) (min-pixel-height-safe . 2) (min-pixel-width-safe . 4)) hc (pixel-width . 212) (pixel-height . 68) (total-width . 212) (total-height . 68) (normal-height . 1.0) (normal-width . 1.0) (combination-limit) (vc (pixel-width . 106) (pixel-height . 68) (total-width . 106) (total-height . 68) (normal-height . 1.0) (normal-width . 0.5) (combination-limit) (leaf (pixel-width . 106) (pixel-height . 34) (total-width . 106) (total-height . 34) (normal-height . 0.5) (normal-width . 1.0) (buffer "test.cpp" (selected) (hscroll . 0) (fringes 0 0 nil) (margins nil) (scroll-bars 0 0 t nil) (vscroll . 0) (dedicated) (point . 1314) (start . 1050))) (leaf (last . t) (pixel-width . 106) (pixel-height . 34) (total-width . 106) (total-height . 34) (normal-height . 0.5) (normal-width . 1.0) (buffer "*shell*" (selected . t) (hscroll . 0) (fringes 0 0 nil) (margins nil) (scroll-bars 0 0 t nil) (vscroll . 0) (dedicated) (point . 316849) (start . 316081)))) (leaf (last . t) (pixel-width . 106) (pixel-height . 68) (total-width . 106) (total-height . 68) (normal-height . 1.0) (normal-width . 0.5) (buffer "algo.hpp" (selected) (hscroll . 0) (fringes 0 0 nil) (margins nil) (scroll-bars 0 0 t nil) (vscroll . 0) (dedicated) (point . 1605) (start . 870)))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring nil)
+(setq register-alist '((105 file . "~/.emacs")))
+(setq file-name-history '("." "/afs/kth.se/home/k/w/kwap/avalg16/project2/tools.hpp" "/afs/kth.se/home/k/w/kwap/avalg16/project2/algo.hpp" "/afs/kth.se/home/k/w/kwap/avalg16/project2/test.cpp"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 206
+  "/afs/kth.se/home/k/w/kwap/avalg16/project2/algo.hpp"
+  "algo.hpp"
+  'c++-mode
+  '(abbrev-mode irony-mode)
+  1605
+  '(11 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/afs/kth.se/home/k/w/kwap/avalg16/project2/test.cpp"
+  "test.cpp"
+  'c++-mode
+  '(abbrev-mode irony-mode)
+  1314
+  '(1744 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/afs/kth.se/home/k/w/kwap/avalg16/project2/tools.hpp"
+  "tools.hpp"
+  'c++-mode
+  '(abbrev-mode irony-mode)
+  492
+  '(708 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+

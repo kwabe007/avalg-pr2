@@ -24,6 +24,13 @@ struct linked_list {
       end = new_end;
     }
   }
+  
+  void add(unsigned new_val_ui) {
+    mpz_t new_val;
+    mpz_init_set_ui(new_val, new_val_ui);
+    add(new_val);
+    mpz_clear(new_val);
+  }
 
   void pop(mpz_t& result) {
     if (start) {
