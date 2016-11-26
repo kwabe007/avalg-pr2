@@ -6,3 +6,7 @@ test
 
 #temporary buffer files
 *~
+#*#
+
+#emacs lock file
+.emacs.desktop.lock
