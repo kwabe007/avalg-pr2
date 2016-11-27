@@ -11,8 +11,12 @@ struct node {
 struct linked_list {
   struct node *start = nullptr;
   struct node *end = nullptr;
+  unsigned long long limit = -1;
+  unsigned size = 0;
 
-  void add(const mpz_t& new_val) {
+  bool add(const mpz_t& new_val) {
+    if(size == limit)
+      return 0;
     if (!start) {
       start = new struct node;
       mpz_init_set(start->val, new_val);
@@ -23,13 +27,16 @@ struct linked_list {
       end->next = new_end;
       end = new_end;
     }
+    ++size;
+    return 1;
   }
   
-  void add(unsigned new_val_ui) {
+  bool add(unsigned new_val_ui) {
     mpz_t new_val;
     mpz_init_set_ui(new_val, new_val_ui);
-    add(new_val);
+    bool result = add(new_val);
     mpz_clear(new_val);
+    return result;
   }
 
   void pop(mpz_t& result) {
@@ -41,6 +48,7 @@ struct linked_list {
       delete start;
       start = new_start;
     }
+    --size;
   }
 
   bool is_empty() {

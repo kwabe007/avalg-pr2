@@ -100,7 +100,7 @@ int main() {
     }*/
   
   //Test fermats algo
-  MAX_CLOCK_FERMATS = 500000LL;
+  //MAX_CLOCK_FERMATS = 500000LL;
   mpz_t fer, res_fer;
   mpz_init2(fer, 100);
   mpz_init2(res_fer, 100);
