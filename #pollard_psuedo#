@@ -1,0 +1,12 @@
+x := 2;
+
+while (.. exit criterion .. )
+
+   y := f(x);
+      p := GCD( | y - x | , N);
+         if ( p > 1)
+	        return "Found factor: p";
+		   x := y;
+		   end
+
+return "Failed. :-("

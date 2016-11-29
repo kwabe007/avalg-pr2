@@ -113,4 +113,55 @@ bool fermats(struct linked_list* result, const mpz_t& n) {
   return status;
 }
 
+void is_square(mpz_t& result, const mpz_t& n){
+  mpz_t root_n, root_n_squared;
+  mpz_init2(root_n, 100);
+  mpz_init2(root_n_squared, 100);
+  
+  mpz_sqrt(root_n, n); 
+  mpz_pow_ui(root_n_squared, root_n, 2);
+
+  if(mpz_cmp(root_n_squared, n) == 0){
+    mpz_set(result, root_n);
+  }
+  else {
+    mpz_set_ui(result, 0);
+  }
+  
+  mpz_clears(root_n, root_n_squared, NULL);
+
+}
+
+//Psuedorandom function for pollards algorithm. Generates an integer between [0,n)
+//'op' and 'n' are used as arguments. Result is stored in 'res'
+void poly(mpz_t& res, const mpz_t& op, const mpz_t& n) {
+}
+
+
+//function for factorization using pollards factorization method
+bool pollards(struct linked_list* result, const mpz_t& n) {
+  std::clock_t begin = std::clock();
+  struct linked_list queue;
+  mpz_t x1, x2, gcd_res, diff_x1_x2, sum, integer_square_sum, root_sum, factor1, factor2;
+  bool status = 1;
+  mpz_init_set_ui(x1,2);
+  mpz_init2(x2);
+  mpz_init2(gcd_res);
+  mpz_init2(diff_x1_x2);
+
+  while(true) {
+    
+    poly(x2, x1, n);
+    mpz_sub(diff_x1_x2, x1, x2);
+    mpz_gcd(gcd_res, diff_x1_x2, n);
+    if()
+      
+  }
+  
+  
+ clean_pollard: //free allocated memory for mpz-variables
+ 
+  return status;
+}
+
 #endif
