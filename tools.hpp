@@ -31,6 +31,7 @@ struct linked_list {
     return 1;
   }
   
+  
   bool add(unsigned new_val_ui) {
     mpz_t new_val;
     mpz_init_set_ui(new_val, new_val_ui);
@@ -57,5 +58,87 @@ struct linked_list {
   
 };
 
+//Generate primes
+void write_primes(const char* source) {
+  
+  FILE *file_in;
+  if ((file_in = fopen(source, "r")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+
+  FILE *file_out;
+  if ((file_out = fopen("primes", "wb")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+
+  unsigned int val;
+  unsigned long int count = 0;
+  while(fscanf(file_in, "%d",&val) != EOF) {   
+    fwrite(&val, sizeof(val), 1, file_out);
+    ++count;
+  }
+
+  std::cerr << "read " << count << " primes" << std::endl;
+
+  FILE *file_read;
+  if ((file_read = fopen("primes", "rb")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+
+  unsigned int r_val;
+  while(fread(&r_val, sizeof(val), 1, file_read)) {
+    //printf("%d",val);
+    //putchar('\n');
+    }
+    
+}
+
+//reads the first x primes and store them in an array
+  unsigned int* read_primes(unsigned int size){
+    FILE* file_in;
+    
+    if ((file_in = fopen("primes", "rb")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+    
+    unsigned int r_val;
+    unsigned int* prime_ptr;
+    prime_ptr = new unsigned int [size];
+    
+    for(unsigned int i = 0; i < size ; ++i) {
+      fread(&r_val, sizeof(r_val), 1, file_in);
+      prime_ptr[i] = r_val;
+    }
+
+    return prime_ptr;
+  }
+
+//reads the first x primes and store them in an array
+  unsigned int* read_primes_txt(unsigned int size){
+    FILE* file_in;
+    
+    if ((file_in = fopen("primes.hpp", "r")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+    
+    unsigned int r_val;
+    unsigned int* prime_ptr;
+    prime_ptr = new unsigned int [size];
+    
+    for(unsigned int i = 0; i < size ; ++i) {
+      fscanf(file_in, "%u", &r_val);
+      prime_ptr[i] = r_val;
+      #ifdef DEBUG
+      std::cerr << "read prime: " << r_val << std::endl;
+      #endif
+    }
+    fclose(file_in);
+    return prime_ptr;
+  }
 
 #endif

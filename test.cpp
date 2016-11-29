@@ -1,8 +1,13 @@
+#define DEBUG
+
 #include <iostream>
 #include <gmp.h>
 #include <ctime>
 #include "algo.hpp"
 #include "tools.hpp"
+
+unsigned long MAX_TRIES = 1000000L;
+unsigned int MAX_PRIME = 100;
 
 int main() {
 
@@ -99,8 +104,8 @@ int main() {
     std::cout << i << std::endl;
     }*/
   
-  //Test fermats algo
-  MAX_CLOCK_FERMATS = 500000LL;
+  /*//Test fermats algo
+  //MAX_CLOCK_FERMATS = 500000LL;
   mpz_t fer, res_fer;
   mpz_init2(fer, 100);
   mpz_init2(res_fer, 100);
@@ -125,6 +130,66 @@ int main() {
     putchar('\n');
   }
 
-  mpz_clears(fer, res_fer, NULL);
+  mpz_clears(fer, res_fer, NULL);*/
+  
+
+/*
+  //Test primality
+  mpz_t t_pri1, t_pri2, t_pri3, t_pri4;
+  mpz_init_set_str(t_pri1, "1267650600228229401496703205376", 10);
+  mpz_init_set_str(t_pri2, "234175891579187581657617243243", 10);
+  mpz_init_set_str(t_pri3, "234175891579187581657617243241", 10);
+  mpz_init_set_str(t_pri4, "1267650600228229401496703205375", 10);
+
+  int res1, res2, res3, res4;
+
+  res1 = mpz_probab_prime_p(t_pri1, 15);
+  res2 = mpz_probab_prime_p(t_pri2, 15);
+  res3 = mpz_probab_prime_p(t_pri3, 15);
+  res4 = mpz_probab_prime_p(t_pri4, 105);
+  
+  std::cout << res1 << std::endl;
+  std::cout << res2 << std::endl;
+  std::cout << res3 << std::endl;
+  std::cout << res4 << std::endl;
+*/
+
+  
+  //Test pollards
+  unsigned int* prime_ptr = read_primes_txt(MAX_PRIME);
+ 
+  mpz_t pol, res_pol;
+  mpz_init2(pol, 100);
+  mpz_init2(res_pol, 100);
+  struct linked_list result;
+
+  FILE *fp;
+
+  if ((fp = fopen("in1", "r")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+    
+  while(mpz_inp_str(pol, stdin, 10)) {
+
+    std::clock_t begin = std::clock(); //clock this function to determine the amount of cycles it takes
+    bool success = pollards(&result, pol, prime_ptr);
+    std::clock_t clock_amount = std::clock() - begin;
+    if (success) {
+      while(!result.is_empty()) {
+	result.pop(res_pol);
+	std::cout << res_pol << std::endl;  
+      }
+    } else {
+      puts("fail");
+      while(!result.is_empty()) {
+	result.pop(res_pol);
+      }
+    }
+    std::cout << "clocks: " << clock_amount << std::endl;
+    putchar('\n');
+  }
+
+  mpz_clears(pol, res_pol, NULL);
   return 0;
 }
