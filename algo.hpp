@@ -58,7 +58,8 @@ bool fermats(struct linked_list* result, const mpz_t& n) {
 	status = 0;
 	goto cleanup;
       }
-      mpz_fdiv_q_ui(current_number_div2, current_number, 2);
+      mpz_fdiv_q_ui(
+current_number_div2, current_number, 2);
       if(!queue.add(current_number_div2)) {
 	status = 0;
 	goto cleanup;
@@ -115,16 +116,23 @@ bool fermats(struct linked_list* result, const mpz_t& n) {
 
 
 //Psuedorandom function for pollards algorithm. Generates an integer between [0,n)
-//'op' and 'n' are used as arguments. Result is stored in 'res'
-void poly(mpz_t& res, const mpz_t& op, const mpz_t& n) {
-  mpz_t pow_res, poly_res;
-  unsigned int A = 2;
+//'x' and 'n' are used as arguments. Implemented as (Ax^2 + C) mod n.
+//Result is stored in 'res'
+void poly(mpz_t& res, const mpz_t& x, const mpz_t& n) {
+  mpz_t pow_res, mul_res, poly_res;
+  
+  unsigned int A = 1047;
+  unsigned long C = 52590032913173611L;
   mpz_init2(pow_res, 100);
+  mpz_init2(mul_res, 100);
   mpz_init2(poly_res, 100);
   
-  mpz_pow_ui(pow_res, op, 2);
-  mpz_add_ui(poly_res, pow_res, A);
+  mpz_pow_ui(pow_res, x, 2);
+  mpz_mul_ui(mul_res, pow_res, A);
+  mpz_add_ui(poly_res, mul_res, C);
   mpz_fdiv_r(res, poly_res, n);
+
+  mpz_clears(pow_res, mul_res, poly_res, NULL);
   
 }
 
@@ -133,19 +141,19 @@ bool pollards_read_primes() {
 }
 
 //function for factorization using pollards factorization method
-bool pollards(struct linked_list* result, const mpz_t& n, unsigned int* prime_ptr) {
-  //std::clock_t begin = std::clock();
+bool pollards(struct linked_list* result, const mpz_t& n) {
+
   struct linked_list queue;
-  mpz_t current_number, current_number_div2, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2;
+  mpz_t current_number, current_number_div2, prime, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2;
   bool status = 1;
-  unsigned int prime_index;
   extern unsigned long MAX_TRIES;
-  extern unsigned int MAX_PRIME;
-  
   
   queue.add(n);
+
+  //Allocate memory for all the mpz variables
   mpz_init2(current_number, 100);
   mpz_init2(current_number_div2, 100);
+  mpz_init2(prime, 100);
   mpz_init2(q_div_prime, 100);
   mpz_init2(r_div_prime, 100);
   mpz_init2(x1, 100);
@@ -161,43 +169,26 @@ bool pollards(struct linked_list* result, const mpz_t& n, unsigned int* prime_pt
     #endif
     mpz_set_ui(x1, 1);
     mpz_set_ui(x2, 0);
-    prime_index = 0; //holds the index of the prime that is currently pointed at
     unsigned long long count = 0;
 
-    //check if prime, this check gives correct positives but can give false negatives
+    //check if prime, this check can give false positives but with a very low probability
     int prime_status = mpz_probab_prime_p(current_number, 40);
-    if (prime_status == 2){ 
+    if (prime_status > 0){ 
       result->add(current_number);
       continue;
     }
 
     //otherwise we assume it is composite and try to crack the number
-    //This works with two methods, one is by by 'brute force' dividing by primes and the other is by pollards method 
     while(true) {
 
       //fail condition: too many tries
       if (count > MAX_TRIES) {
 	goto fail;
       }
+      
 
-
-      //method 1: 'brute-force' prime-division
-      //check if its divisble by some primes from a lookup
-      //the amount of primes it can check is limited by MAX_PRIME
-      if (prime_index < MAX_PRIME) {
-	unsigned int prime = prime_ptr[prime_index];
-	mpz_fdiv_qr_ui(q_div_prime, r_div_prime, current_number, prime);
-	if(mpz_cmp_ui(r_div_prime, 0) == 0) {
-	  queue.add(prime);
-	  queue.add(q_div_prime);
-	  break;
-	} else {
-	  ++prime_index; //if the prime was not a divisor to the current number, set index to the next prime
-	}
-      }
-
-      //method 2: pollards method
-      //if x1 and x2 are equal we have found a loop so no point in using the same polynomial function
+      //cracking method: pollards method
+      //if x1 and x2 are equal we have found a loop so here one could implement a feature to change the random number generator
       if (mpz_cmp(x1,x2)) {
 	mpz_sub(diff_x1_x2, x1, x2);
 	mpz_abs(diff_x1_x2, diff_x1_x2);
@@ -207,14 +198,16 @@ bool pollards(struct linked_list* result, const mpz_t& n, unsigned int* prime_pt
 	  queue.add(gcd_res);
 	  mpz_fdiv_q(div_2, current_number, gcd_res);
 	  queue.add(div_2);
-	  #ifdef DEBUG
+#ifdef DEBUG
 	  std::cout << "added: " << gcd_res << ", " << div_2 <<  std::endl;
-	  #endif
+#endif
 	  break;
 	}
 	poly(x1, x1, current_number);
 	poly(x2, x2, current_number);
 	poly(x2, x2, current_number);
+      } else { //if pollard reaches one cycle without finding a factor we can mark fail since there is (yet) no change of the number generator
+	goto fail;
       }
 
       ++count;
@@ -229,7 +222,7 @@ bool pollards(struct linked_list* result, const mpz_t& n, unsigned int* prime_pt
   status = 0;
 
  clean_pollard: //free allocated memory for mpz-variables
-  mpz_clears(current_number, current_number_div2, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2, NULL);
+  mpz_clears(current_number, current_number_div2, prime, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2, NULL);
   return status;
     
 }

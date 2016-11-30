@@ -6,8 +6,7 @@
 #include "algo.hpp"
 #include "tools.hpp"
 
-unsigned long MAX_TRIES = 1000000L;
-unsigned int MAX_PRIME = 100;
+unsigned long MAX_TRIES = 100000L;
 
 int main() {
 
@@ -156,7 +155,8 @@ int main() {
 
   
   //Test pollards
-  unsigned int* prime_ptr = read_primes_txt(MAX_PRIME);
+  //unsigned int* prime_ptr = read_primes_txt(MAX_PRIME);
+  //unsigned int* prime_ptr = NULL;
  
   mpz_t pol, res_pol;
   mpz_init2(pol, 100);
@@ -171,9 +171,11 @@ int main() {
   }
     
   while(mpz_inp_str(pol, stdin, 10)) {
+    if(mpz_cmp_ui(pol, 0) == 0)
+      break;
 
     std::clock_t begin = std::clock(); //clock this function to determine the amount of cycles it takes
-    bool success = pollards(&result, pol, prime_ptr);
+    bool success = pollards(&result, pol);
     std::clock_t clock_amount = std::clock() - begin;
     if (success) {
       while(!result.is_empty()) {
