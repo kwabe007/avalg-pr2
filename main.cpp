@@ -3,7 +3,7 @@
 #include "algo.hpp"
 #include "tools.hpp"
 
-unsigned long MAX_TRIES = 100000L;
+unsigned long MAX_TRIES = 200000L;
 
 int main() {
 
