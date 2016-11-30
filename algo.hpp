@@ -144,16 +144,17 @@ bool pollards_read_primes() {
 bool pollards(struct linked_list* result, const mpz_t& n) {
 
   struct linked_list queue;
-  mpz_t current_number, current_number_div2, prime, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2;
+  mpz_t current_number, current_number_div2, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2;
   bool status = 1;
   extern unsigned long MAX_TRIES;
+  extern unsigned int PRIMES_TO_TRY; 
+  extern unsigned int PRIME_ARRAY[];
   
   queue.add(n);
 
   //Allocate memory for all the mpz variables
   mpz_init2(current_number, 100);
   mpz_init2(current_number_div2, 100);
-  mpz_init2(prime, 100);
   mpz_init2(q_div_prime, 100);
   mpz_init2(r_div_prime, 100);
   mpz_init2(x1, 100);
@@ -177,17 +178,33 @@ bool pollards(struct linked_list* result, const mpz_t& n) {
       result->add(current_number);
       continue;
     }
-
     //otherwise we assume it is composite and try to crack the number
+
+    //first, try a simple brute force prime division of the first n primes where n is decided by the value of PRIMES_TO_TRY
+    bool prime_div_found = false;
+    for (unsigned int i = 0; i < PRIMES_TO_TRY; ++i) {
+      unsigned int prime = PRIME_ARRAY[i];
+      mpz_fdiv_qr_ui(q_div_prime, r_div_prime, current_number, prime);
+      if(mpz_cmp_ui(r_div_prime, 0) == 0) {
+	prime_div_found = true;
+	queue.add(prime);
+	queue.add(q_div_prime);
+	break;
+      }
+    }
+    if (prime_div_found == true) {
+      continue;
+    }
+
+    
+    //try pollards method
     while(true) {
 
       //fail condition: too many tries
       if (count > MAX_TRIES) {
 	goto fail;
       }
-      
 
-      //cracking method: pollards method
       //if x1 and x2 are equal we have found a loop so here one could implement a feature to change the random number generator
       if (mpz_cmp(x1,x2)) {
 	mpz_sub(diff_x1_x2, x1, x2);
@@ -222,7 +239,7 @@ bool pollards(struct linked_list* result, const mpz_t& n) {
   status = 0;
 
  clean_pollard: //free allocated memory for mpz-variables
-  mpz_clears(current_number, current_number_div2, prime, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2, NULL);
+  mpz_clears(current_number, current_number_div2, q_div_prime, r_div_prime, x1, x2, diff_x1_x2, gcd_res, div_2, NULL);
   return status;
     
 }

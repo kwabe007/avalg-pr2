@@ -59,6 +59,40 @@ struct linked_list {
 };
 
 //Generate primes
+void write_primes_txt(const char* source) {
+  
+  FILE *file_in;
+  if ((file_in = fopen(source, "r")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+
+  FILE *file_out;
+  if ((file_out = fopen("prime-comma", "w")) ==NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
+
+#ifdef DEBUG
+  unsigned int first;
+  unsigned int last;
+#endif
+  unsigned int val;
+  unsigned long int count = 0;
+  for(count = 0; fscanf(file_in, "%d",&val) != EOF; ++count) {
+#ifdef DEBUG
+    if (count == 0)
+      first = val;
+    last = val;
+#endif
+    fprintf(file_out, "%u, ", val);
+  }
+
+#ifdef DEBUG
+  printf("wrote %lu primes, first: %u, last: %u\n", count, first, last);
+#endif
+    
+}
 void write_primes(const char* source) {
   
   FILE *file_in;
